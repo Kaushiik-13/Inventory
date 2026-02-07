@@ -23,7 +23,7 @@
 
         /* ==================== CONTAINER ==================== */
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: #ffffff;
             border-radius: 20px;
@@ -60,26 +60,45 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* ==================== MAIN CONTENT ==================== */
-        .content {
+        /* ==================== MAIN LAYOUT ==================== */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        /* ==================== LEFT PANEL (Products) ==================== */
+        .left-panel {
             padding: 1.5rem;
             background: #f5f5f5;
+            border-right: 3px solid #e0e0e0;
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #000000;
         }
 
         /* ==================== PRODUCT GRID ==================== */
         .products-grid {
             display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1rem;
-            margin-bottom: 1.5rem;
         }
 
         .product-card {
             background: #ffffff;
             border-radius: 12px;
-            padding: 1.25rem;
+            padding: 1rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s, box-shadow 0.2s;
             border: 2px solid #e0e0e0;
+            cursor: pointer;
         }
 
         .product-card:hover {
@@ -95,39 +114,46 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
             border-bottom: 2px solid #e0e0e0;
         }
 
         .product-name {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #000000;
         }
 
         .product-price {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #1a1a1a;
             font-weight: 700;
             background: #f0f0f0;
-            padding: 0.25rem 0.75rem;
-            border-radius: 8px;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
         }
 
         .stock-info {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #4a4a4a;
-            margin-bottom: 1rem;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stock-display {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .stock-info::before {
+        .stock-display::before {
             content: '📦';
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .stock-low {
@@ -135,7 +161,7 @@
             font-weight: 600;
         }
 
-        .stock-low::before {
+        .stock-low .stock-display::before {
             content: '⚠️';
         }
 
@@ -144,173 +170,391 @@
             font-weight: 700;
         }
 
-        .stock-out::before {
+        .stock-out .stock-display::before {
             content: '❌';
         }
 
-        .quantity-controls {
+        .stock-controls {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
+            gap: 0.25rem;
+            background: #f5f5f5;
+            padding: 0.25rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
         }
 
-        .qty-btn {
-            width: 60px;
-            height: 60px;
+        .stock-btn {
+            width: 24px;
+            height: 24px;
             border: none;
-            border-radius: 12px;
-            font-size: 2rem;
+            border-radius: 4px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .qty-btn.minus {
-            background: #ffffff;
-            color: #000000;
-            border: 3px solid #cccccc;
-        }
-
-        .qty-btn.minus:hover:not(:disabled) {
-            background: #f5f5f5;
-            border-color: #000000;
-        }
-
-        .qty-btn.plus {
+        .stock-btn.add {
             background: #000000;
             color: white;
-            border: 3px solid #000000;
         }
 
-        .qty-btn.plus:hover:not(:disabled) {
+        .stock-btn.add:hover {
             background: #1a1a1a;
-            border-color: #1a1a1a;
         }
 
-        .qty-btn:active:not(:disabled) {
-            transform: scale(0.95);
+        .stock-btn.remove {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #cccccc;
         }
 
-        .qty-btn:disabled {
+        .stock-btn.remove:hover {
+            background: #f5f5f5;
+        }
+
+        .stock-btn:disabled {
             opacity: 0.3;
             cursor: not-allowed;
         }
 
-        .quantity-display {
-            flex: 1;
-            text-align: center;
+        /* ==================== RIGHT PANEL (Orders) ==================== */
+        .right-panel {
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 200px);
+        }
+
+        .order-tabs {
+            display: flex;
             background: #f5f5f5;
-            padding: 0.75rem;
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
+            border-bottom: 3px solid #e0e0e0;
         }
 
-        .qty-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #000000;
-        }
-
-        .item-total {
-            font-size: 1rem;
-            color: #4a4a4a;
-            margin-top: 0.25rem;
-            font-weight: 600;
-        }
-
-        /* ==================== BILL SUMMARY ==================== */
-        .bill-summary {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border: 3px solid #000000;
-        }
-
-        .bill-total {
-            font-size: 2rem;
-            font-weight: 700;
+        .tab {
+            flex: 1;
+            padding: 1rem;
             text-align: center;
-            color: #ffffff;
-        }
-
-        .bill-label {
-            font-size: 1rem;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        /* ==================== ACTION BUTTONS ==================== */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn {
-            padding: 1.25rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
             font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
+            border: none;
+            background: #f5f5f5;
+            color: #666666;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .btn:active:not(:disabled) {
-            transform: translateY(2px);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        .tab.active {
+            background: #ffffff;
+            color: #000000;
+            border-bottom: 3px solid #000000;
         }
 
-        .btn-complete {
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        .tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        /* ==================== CURRENT ORDER ==================== */
+        .current-order-items {
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            background: #f5f5f5;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .order-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-item-name {
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .order-item-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .qty-btn-small {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .qty-btn-small.minus {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #cccccc;
+        }
+
+        .qty-btn-small.plus {
+            background: #000000;
             color: white;
-            grid-column: 1 / -1;
-            border: 3px solid #000000;
+            border: 2px solid #000000;
         }
 
-        .btn-complete:hover:not(:disabled) {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        .qty-btn-small:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
         }
 
-        .btn-complete:disabled {
+        .qty-display {
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .remove-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .order-total {
+            background: #000000;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .order-total-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            opacity: 0.8;
+        }
+
+        .order-total-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .order-actions {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-create-order {
+            background: #000000;
+            color: white;
+            border: 2px solid #000000;
+        }
+
+        .btn-create-order:hover:not(:disabled) {
+            background: #1a1a1a;
+        }
+
+        .btn-create-order:disabled {
             opacity: 0.4;
             cursor: not-allowed;
             background: #cccccc;
             border-color: #cccccc;
+        }
+
+        .btn-clear {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        .btn-clear:hover {
+            background: #f5f5f5;
+        }
+
+        /* ==================== ORDER CARDS ==================== */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .order-card {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .order-number {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #000000;
+        }
+
+        .order-time {
+            font-size: 0.8rem;
             color: #666666;
+        }
+
+        .order-items-summary {
+            font-size: 0.85rem;
+            color: #4a4a4a;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-card-total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .order-card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .order-card-actions .btn-cancel {
+            grid-column: 1 / -1;
+        }
+
+        .btn-small {
+            padding: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-progress {
+            background: #4a4a4a;
+            color: white;
+            border: 2px solid #4a4a4a;
+        }
+
+        .btn-progress:hover {
+            background: #333333;
+        }
+
+        .btn-complete {
+            background: #000000;
+            color: white;
+            border: 2px solid #000000;
+        }
+
+        .btn-complete:hover {
+            background: #1a1a1a;
+        }
+
+        .btn-cancel {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        .btn-cancel:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-update {
+            background: #4a4a4a !important;
+            border-color: #4a4a4a !important;
+        }
+
+        .btn-update:hover:not(:disabled) {
+            background: #333333 !important;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666666;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ==================== BOTTOM ACTIONS ==================== */
+        .bottom-actions {
+            padding: 1rem 1.5rem;
+            background: #f5f5f5;
+            border-top: 3px solid #e0e0e0;
+            display: flex;
+            gap: 1rem;
         }
 
         .btn-reset {
             background: #ffffff;
             color: #000000;
-            border: 3px solid #000000;
+            border: 2px solid #000000;
+            flex: 1;
         }
 
-        .btn-reset:hover {
-            background: #f5f5f5;
-        }
-
-        .btn-toggle {
+        .btn-summary {
             background: #4a4a4a;
             color: white;
-            border: 3px solid #4a4a4a;
-        }
-
-        .btn-toggle:hover {
-            background: #333333;
-            border-color: #333333;
+            border: 2px solid #4a4a4a;
+            flex: 1;
         }
 
         /* ==================== SALES SUMMARY ==================== */
@@ -318,7 +562,7 @@
             background: #ffffff;
             border-radius: 12px;
             padding: 1.5rem;
-            margin-top: 1.5rem;
+            margin: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border: 2px solid #e0e0e0;
         }
@@ -358,10 +602,6 @@
         .summary-table td {
             color: #4a4a4a;
             font-weight: 500;
-        }
-
-        .summary-table tr:last-child td {
-            border-bottom: none;
         }
 
         .summary-table tr:hover {
@@ -405,422 +645,47 @@
         }
 
         /* ==================== RESPONSIVE ==================== */
-
-        /* Large Desktops (1200px+) */
-        @media (min-width: 1200px) {
-            .container {
-                max-width: 1000px;
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
             }
 
+            .left-panel {
+                border-right: none;
+                border-bottom: 3px solid #e0e0e0;
+            }
+
+            .right-panel {
+                max-height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
             .header h1 {
-                font-size: 2.5rem;
+                font-size: 1.5rem;
             }
 
             .revenue-display {
-                font-size: 1.75rem;
+                font-size: 1.2rem;
             }
         }
 
-        /* Tablets and Medium Devices (768px - 1199px) */
-        @media (min-width: 768px) and (max-width: 1199px) {
-            .container {
-                max-width: 900px;
-            }
-
+        @media (max-width: 480px) {
             .products-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
             }
 
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .revenue-display {
-                font-size: 1.5rem;
-            }
-
-            .product-card {
-                padding: 1.5rem;
-            }
-
-            .qty-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 2.5rem;
-            }
-        }
-
-        /* Small Tablets and Large Phones (600px - 767px) */
-        @media (min-width: 600px) and (max-width: 767px) {
-            .header h1 {
-                font-size: 1.75rem;
-            }
-
-            .revenue-display {
-                font-size: 1.3rem;
-                padding: 0.6rem 1.2rem;
-            }
-
-            .product-name {
-                font-size: 1.2rem;
-            }
-
-            .product-price {
-                font-size: 1.1rem;
-            }
-
-            .qty-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 2rem;
-            }
-
-            .qty-number {
-                font-size: 1.75rem;
-            }
-
-            .bill-total {
-                font-size: 1.75rem;
-            }
-
-            .btn {
-                font-size: 1.1rem;
-                padding: 1.1rem;
-            }
-        }
-
-        /* Standard Phones (480px - 599px) */
-        @media (min-width: 480px) and (max-width: 599px) {
-            body {
-                padding: 0.75rem;
-            }
-
-            .container {
-                border-radius: 15px;
-            }
-
-            .header {
-                padding: 1.25rem;
-            }
-
-            .header h1 {
-                font-size: 1.5rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .revenue-display {
-                font-size: 1.2rem;
-                padding: 0.6rem 1.2rem;
-            }
-
-            .content {
-                padding: 1.25rem;
-            }
-
-            .product-card {
-                padding: 1rem;
-                border-radius: 12px;
-            }
-
-            .product-name {
-                font-size: 1.1rem;
-            }
-
-            .product-price {
-                font-size: 1rem;
-            }
-
-            .stock-info {
-                font-size: 0.85rem;
-                margin-bottom: 0.75rem;
-            }
-
-            .qty-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 1.75rem;
-            }
-
-            .qty-number {
-                font-size: 1.6rem;
-            }
-
-            .item-total {
-                font-size: 0.9rem;
-            }
-
-            .bill-summary {
-                padding: 1.25rem;
-                border-radius: 12px;
-            }
-
-            .bill-label {
-                font-size: 0.9rem;
-            }
-
-            .bill-total {
-                font-size: 1.6rem;
-            }
-
-            .btn {
-                font-size: 1rem;
-                padding: 1rem;
-                border-radius: 12px;
-            }
-
-            .sales-summary {
-                padding: 1.25rem;
-            }
-
-            .sales-summary h2 {
-                font-size: 1.3rem;
-            }
-
-            .summary-table th,
-            .summary-table td {
-                padding: 0.6rem;
-                font-size: 0.9rem;
-            }
-
-            .notification {
-                padding: 1.5rem;
-                max-width: 85%;
-            }
-
-            .notification-icon {
-                font-size: 3rem;
-            }
-
-            .notification-message {
-                font-size: 1.3rem;
-            }
-        }
-
-        /* Small Phones (320px - 479px) */
-        @media (max-width: 479px) {
-            body {
-                padding: 0.5rem;
-            }
-
-            .container {
-                border-radius: 12px;
-            }
-
-            .header {
-                padding: 1rem;
-            }
-
-            .header h1 {
-                font-size: 1.3rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .revenue-display {
-                font-size: 1rem;
-                padding: 0.5rem 1rem;
-            }
-
-            .content {
-                padding: 1rem;
-            }
-
-            .products-grid {
-                gap: 0.75rem;
-            }
-
-            .product-card {
-                padding: 0.9rem;
-                border-radius: 10px;
-            }
-
-            .product-header {
-                margin-bottom: 0.75rem;
-            }
-
-            .product-name {
-                font-size: 1rem;
-            }
-
-            .product-price {
-                font-size: 0.95rem;
-            }
-
-            .stock-info {
-                font-size: 0.8rem;
-                margin-bottom: 0.75rem;
-            }
-
-            .qty-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
-            }
-
-            .qty-number {
-                font-size: 1.4rem;
-            }
-
-            .item-total {
-                font-size: 0.85rem;
-            }
-
-            .bill-summary {
-                padding: 1rem;
-                margin-bottom: 1rem;
-                border-radius: 10px;
-            }
-
-            .bill-label {
-                font-size: 0.85rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .bill-total {
-                font-size: 1.4rem;
-            }
-
-            .action-buttons {
-                gap: 0.75rem;
-                margin-bottom: 1rem;
-            }
-
-            .btn {
-                font-size: 0.9rem;
-                padding: 0.9rem;
-                border-radius: 10px;
-            }
-
-            .sales-summary {
-                padding: 1rem;
-                margin-top: 1rem;
-                border-radius: 10px;
-            }
-
-            .sales-summary h2 {
-                font-size: 1.2rem;
-                margin-bottom: 0.75rem;
-            }
-
-            .summary-table th,
-            .summary-table td {
-                padding: 0.5rem;
-                font-size: 0.85rem;
-            }
-
-            .notification {
-                padding: 1.25rem;
-                max-width: 90%;
-                border-radius: 15px;
-            }
-
-            .notification-icon {
-                font-size: 2.5rem;
-                margin-bottom: 0.75rem;
-            }
-
-            .notification-message {
-                font-size: 1.1rem;
-            }
-        }
-
-        /* Extra Small Phones (below 360px) */
-        @media (max-width: 359px) {
-            .header h1 {
-                font-size: 1.1rem;
-            }
-
-            .revenue-display {
-                font-size: 0.9rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            .product-name {
-                font-size: 0.9rem;
-            }
-
-            .product-price {
-                font-size: 0.85rem;
-            }
-
-            .qty-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-            }
-
-            .qty-number {
-                font-size: 1.2rem;
-            }
-
-            .item-total {
+            .tab {
                 font-size: 0.75rem;
+                padding: 0.75rem 0.5rem;
             }
 
-            .bill-total {
-                font-size: 1.2rem;
-            }
-
-            .btn {
-                font-size: 0.8rem;
-                padding: 0.8rem;
-            }
-
-            .summary-table th,
-            .summary-table td {
-                padding: 0.4rem;
-                font-size: 0.75rem;
-            }
-        }
-
-        /* Landscape Orientation Optimization */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .header {
-                padding: 0.75rem;
-            }
-
-            .header h1 {
-                font-size: 1.2rem;
-                margin-bottom: 0.3rem;
-            }
-
-            .revenue-display {
-                font-size: 1rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            .content {
-                padding: 0.75rem;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-            }
-
-            .product-card {
-                padding: 0.75rem;
-            }
-
-            .qty-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-            }
-
-            .bill-summary {
-                padding: 0.75rem;
-            }
-
-            .notification {
-                padding: 1rem;
-            }
-
-            .notification-icon {
-                font-size: 2rem;
+            .order-card-actions {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -836,44 +701,74 @@
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="content">
-            <!-- Products Grid -->
-            <div class="products-grid" id="productsGrid"></div>
-
-            <!-- Bill Summary -->
-            <div class="bill-summary">
-                <div class="bill-label">Current Bill Total</div>
-                <div class="bill-total">₹<span id="billTotal">0</span></div>
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Left Panel: Products -->
+            <div class="left-panel">
+                <h2 class="panel-title">📋 Menu</h2>
+                <div class="products-grid" id="productsGrid"></div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="btn btn-complete" id="completeSaleBtn" disabled>
-                    Complete Sale
-                </button>
-                <button class="btn btn-reset" id="resetDayBtn">
-                    Reset Day
-                </button>
-                <button class="btn btn-toggle" id="toggleSummaryBtn">
-                    View Summary
-                </button>
-            </div>
+            <!-- Right Panel: Orders -->
+            <div class="right-panel">
+                <!-- Tabs -->
+                <div class="order-tabs">
+                    <button class="tab active" data-tab="new" onclick="switchTab('new')">New Order</button>
+                    <button class="tab" data-tab="progress" onclick="switchTab('progress')">In Progress (<span
+                            id="progressCount">0</span>)</button>
+                    <button class="tab" data-tab="completed" onclick="switchTab('completed')">Completed (<span
+                            id="completedCount">0</span>)</button>
+                </div>
 
-            <!-- Sales Summary (Hidden by default) -->
-            <div class="sales-summary hidden" id="salesSummary">
-                <h2>📊 End of Day Summary</h2>
-                <table class="summary-table">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Sold</th>
-                            <th>Stock</th>
-                        </tr>
-                    </thead>
-                    <tbody id="summaryTableBody"></tbody>
-                </table>
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- New Order Tab -->
+                    <div id="newOrderTab" class="tab-panel">
+                        <div class="current-order-items" id="currentOrderItems"></div>
+                        <div class="order-total">
+                            <div class="order-total-label">Order Total</div>
+                            <div class="order-total-amount">₹<span id="orderTotal">0</span></div>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-create-order" id="createOrderBtn" disabled
+                                onclick="createOrder()">Create Order</button>
+                            <button class="btn btn-clear" onclick="clearCurrentOrder()">Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- In Progress Tab -->
+                    <div id="progressTab" class="tab-panel hidden">
+                        <div class="orders-list" id="progressOrders"></div>
+                    </div>
+
+                    <!-- Completed Tab -->
+                    <div id="completedTab" class="tab-panel hidden">
+                        <div class="orders-list" id="completedOrders"></div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="bottom-actions">
+            <button class="btn btn-reset" onclick="resetDay()">Reset Day</button>
+            <button class="btn btn-summary" onclick="toggleSummary()">View Summary</button>
+        </div>
+
+        <!-- Sales Summary (Hidden by default) -->
+        <div class="sales-summary hidden" id="salesSummary">
+            <h2>📊 End of Day Summary</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Sold</th>
+                        <th>Stock</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody id="summaryTableBody"></tbody>
+            </table>
         </div>
     </div>
 
@@ -885,7 +780,6 @@
 
     <script>
         // ==================== PRODUCT CONFIGURATION ====================
-        // Fixed list of bakery items - DO NOT MODIFY during runtime
         const INITIAL_PRODUCTS = [
             { id: 1, name: 'Rose Milk', price: 50, initialStock: 25 },
             { id: 2, name: 'Custard', price: 40, initialStock: 40 },
@@ -895,17 +789,25 @@
 
         // ==================== STATE MANAGEMENT ====================
         let products = [];
-        let cart = {}; // { productId: quantity }
+        let currentOrder = {}; // { productId: quantity }
+        let orders = {
+            new: [],
+            progress: [],
+            completed: []
+        };
+        let orderCounter = 1;
         let totalRevenue = 0;
-        let totalSold = {}; // { productId: totalQuantitySold }
+        let totalSold = {};
+        let currentTab = 'new';
 
         // ==================== INITIALIZATION ====================
         function init() {
             loadFromLocalStorage();
             renderProducts();
-            updateBillTotal();
+            updateCurrentOrder();
+            renderAllOrders();
             updateRevenueDisplay();
-            attachEventListeners();
+            updateTabCounts();
         }
 
         // ==================== LOCAL STORAGE ====================
@@ -913,11 +815,12 @@
             const savedStock = localStorage.getItem('bakeryStock');
             const savedRevenue = localStorage.getItem('bakeryRevenue');
             const savedSold = localStorage.getItem('bakerySold');
+            const savedOrders = localStorage.getItem('bakeryOrders');
+            const savedOrderCounter = localStorage.getItem('bakeryOrderCounter');
 
             if (savedStock) {
                 products = JSON.parse(savedStock);
             } else {
-                // Initialize with default stock
                 products = INITIAL_PRODUCTS.map(p => ({ ...p, stock: p.initialStock }));
             }
 
@@ -928,15 +831,24 @@
             if (savedSold) {
                 totalSold = JSON.parse(savedSold);
             } else {
-                // Initialize sold tracking
                 INITIAL_PRODUCTS.forEach(p => {
                     totalSold[p.id] = 0;
                 });
             }
 
-            // Initialize cart
+            if (savedOrders) {
+                orders = JSON.parse(savedOrders);
+            }
+
+            if (savedOrderCounter) {
+                orderCounter = parseInt(savedOrderCounter);
+            }
+
+            // Initialize current order
             products.forEach(p => {
-                cart[p.id] = 0;
+                if (!currentOrder[p.id]) {
+                    currentOrder[p.id] = 0;
+                }
             });
         }
 
@@ -944,199 +856,441 @@
             localStorage.setItem('bakeryStock', JSON.stringify(products));
             localStorage.setItem('bakeryRevenue', totalRevenue.toString());
             localStorage.setItem('bakerySold', JSON.stringify(totalSold));
+            localStorage.setItem('bakeryOrders', JSON.stringify(orders));
+            localStorage.setItem('bakeryOrderCounter', orderCounter.toString());
         }
 
         function resetDay() {
-            if (confirm('Are you sure you want to reset the day? This will restore stock and clear revenue.')) {
-                // Reset stock to initial values
+            if (confirm('Are you sure you want to reset the day? This will clear all orders, restore stock and reset revenue.')) {
                 products = INITIAL_PRODUCTS.map(p => ({ ...p, stock: p.initialStock }));
-
-                // Reset revenue
                 totalRevenue = 0;
-
-                // Reset sold tracking
                 INITIAL_PRODUCTS.forEach(p => {
                     totalSold[p.id] = 0;
                 });
-
-                // Reset cart
+                currentOrder = {};
                 products.forEach(p => {
-                    cart[p.id] = 0;
+                    currentOrder[p.id] = 0;
                 });
-
-                // Clear localStorage
+                orders = { new: [], progress: [], completed: [] };
+                orderCounter = 1;
                 localStorage.clear();
-
-                // Re-render
                 renderProducts();
-                updateBillTotal();
+                updateCurrentOrder();
+                renderAllOrders();
                 updateRevenueDisplay();
-                updateSummaryTable();
-
+                updateTabCounts();
                 showNotification('✅', 'Day Reset Successfully!');
             }
         }
 
-        // ==================== RENDERING ====================
+        // ==================== PRODUCT RENDERING ====================
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = '';
 
             products.forEach(product => {
-                const card = createProductCard(product);
+                const card = document.createElement('div');
+                card.className = 'product-card';
+
+                const stockClass = product.stock === 0 ? 'stock-out' : (product.stock <= 10 ? 'stock-low' : '');
+
+                card.innerHTML = `
+                    <div class="product-header" onclick="addToCurrentOrder(${product.id})" style="cursor: pointer;">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">₹${product.price}</div>
+                    </div>
+                    <div class="stock-info ${stockClass}">
+                        <div class="stock-display">
+                            Stock: ${product.stock} ${product.stock === 0 ? '(Out)' : product.stock <= 10 ? '(Low)' : ''}
+                        </div>
+                        <div class="stock-controls" onclick="event.stopPropagation();">
+                            <button class="stock-btn remove" onclick="removeStock(${product.id})" ${product.stock === 0 ? 'disabled' : ''} title="Remove from stock">−</button>
+                            <button class="stock-btn add" onclick="addStock(${product.id})" title="Add to stock">+</button>
+                        </div>
+                    </div>
+                `;
+
                 grid.appendChild(card);
             });
         }
 
-        function createProductCard(product) {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-
-            const quantity = cart[product.id] || 0;
-            const itemTotal = quantity * product.price;
-            const stockClass = product.stock === 0 ? 'stock-out' : (product.stock <= 10 ? 'stock-low' : '');
-
-            card.innerHTML = `
-                <div class="product-header">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-price">₹${product.price}</div>
-                </div>
-                <div class="stock-info ${stockClass}">
-                    Stock: ${product.stock} ${product.stock === 0 ? '(Out of Stock)' : product.stock <= 10 ? '(Low Stock)' : ''}
-                </div>
-                <div class="quantity-controls">
-                    <button class="qty-btn minus" onclick="decreaseQuantity(${product.id})" ${quantity === 0 ? 'disabled' : ''}>−</button>
-                    <div class="quantity-display">
-                        <div class="qty-number">${quantity}</div>
-                        <div class="item-total">₹${itemTotal}</div>
-                    </div>
-                    <button class="qty-btn plus" onclick="increaseQuantity(${product.id})" ${product.stock === 0 || quantity >= product.stock ? 'disabled' : ''}>+</button>
-                </div>
-            `;
-
-            return card;
-        }
-
-        // ==================== QUANTITY MANAGEMENT ====================
-        function increaseQuantity(productId) {
+        // ==================== STOCK MANAGEMENT ====================
+        function addStock(productId) {
             const product = products.find(p => p.id === productId);
-
-            // Check if stock is available
-            if (cart[productId] < product.stock) {
-                cart[productId]++;
-                renderProducts();
-                updateBillTotal();
+            if (product) {
+                const amount = prompt(`Add stock for ${product.name}\nCurrent stock: ${product.stock}\n\nEnter quantity to add:`, '10');
+                if (amount !== null) {
+                    const qty = parseInt(amount);
+                    if (!isNaN(qty) && qty > 0) {
+                        product.stock += qty;
+                        saveToLocalStorage();
+                        renderProducts();
+                        showNotification('✅', `Added ${qty} ${product.name} to stock`);
+                    } else if (qty <= 0) {
+                        showNotification('❌', 'Please enter a positive number');
+                    }
+                }
             }
         }
 
-        function decreaseQuantity(productId) {
-            if (cart[productId] > 0) {
-                cart[productId]--;
-                renderProducts();
-                updateBillTotal();
+        function removeStock(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product && product.stock > 0) {
+                const amount = prompt(`Remove stock for ${product.name}\nCurrent stock: ${product.stock}\n\nEnter quantity to remove:`, '1');
+                if (amount !== null) {
+                    const qty = parseInt(amount);
+                    if (!isNaN(qty) && qty > 0) {
+                        if (qty <= product.stock) {
+                            product.stock -= qty;
+                            saveToLocalStorage();
+                            renderProducts();
+                            showNotification('✅', `Removed ${qty} ${product.name} from stock`);
+                        } else {
+                            showNotification('❌', `Cannot remove ${qty}. Only ${product.stock} in stock`);
+                        }
+                    } else if (qty <= 0) {
+                        showNotification('❌', 'Please enter a positive number');
+                    }
+                }
             }
         }
 
-        // ==================== BILL CALCULATION ====================
-        function updateBillTotal() {
-            let total = 0;
-
-            products.forEach(product => {
-                const quantity = cart[product.id] || 0;
-                total += quantity * product.price;
-            });
-
-            document.getElementById('billTotal').textContent = total;
-
-            // Enable/disable complete sale button
-            const completeSaleBtn = document.getElementById('completeSaleBtn');
-            completeSaleBtn.disabled = total === 0;
+        // ==================== CURRENT ORDER MANAGEMENT ====================
+        function addToCurrentOrder(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product.stock > 0 && currentOrder[productId] < product.stock) {
+                currentOrder[productId]++;
+                updateCurrentOrder();
+            }
         }
 
-        function updateRevenueDisplay() {
-            document.getElementById('totalRevenue').textContent = totalRevenue;
+        function increaseOrderQuantity(productId) {
+            const product = products.find(p => p.id === productId);
+            if (currentOrder[productId] < product.stock) {
+                currentOrder[productId]++;
+                updateCurrentOrder();
+            }
         }
 
-        // ==================== SALE COMPLETION ====================
-        function completeSale() {
+        function decreaseOrderQuantity(productId) {
+            if (currentOrder[productId] > 0) {
+                currentOrder[productId]--;
+                updateCurrentOrder();
+            }
+        }
+
+        function removeFromOrder(productId) {
+            currentOrder[productId] = 0;
+            updateCurrentOrder();
+        }
+
+        function updateCurrentOrder() {
+            const container = document.getElementById('currentOrderItems');
+            container.innerHTML = '';
+
             let total = 0;
             let hasItems = false;
 
-            // Calculate total and check if there are items
             products.forEach(product => {
-                const quantity = cart[product.id] || 0;
+                const quantity = currentOrder[product.id] || 0;
                 if (quantity > 0) {
                     hasItems = true;
+                    const itemTotal = quantity * product.price;
+                    total += itemTotal;
+
+                    const item = document.createElement('div');
+                    item.className = 'order-item';
+                    item.innerHTML = `
+                        <div class="order-item-header">
+                            <span class="order-item-name">${product.name}</span>
+                            <span class="order-item-price">₹${itemTotal}</span>
+                        </div>
+                        <div class="order-item-controls">
+                            <div class="qty-control">
+                                <button class="qty-btn-small minus" onclick="decreaseOrderQuantity(${product.id})" ${quantity === 0 ? 'disabled' : ''}>−</button>
+                                <span class="qty-display">${quantity}</span>
+                                <button class="qty-btn-small plus" onclick="increaseOrderQuantity(${product.id})" ${quantity >= product.stock ? 'disabled' : ''}>+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromOrder(${product.id})">Remove</button>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                }
+            });
+
+            if (!hasItems) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🛒</div><div>Add items to create an order</div></div>';
+            }
+
+            document.getElementById('orderTotal').textContent = total;
+            document.getElementById('createOrderBtn').disabled = !hasItems;
+            updateCreateOrderButton();
+        }
+
+        function updateCreateOrderButton() {
+            const btn = document.getElementById('createOrderBtn');
+            if (editingOrderId !== null) {
+                btn.textContent = `Update Order #${editingOrderId}`;
+                btn.classList.add('btn-update');
+            } else {
+                btn.textContent = 'Create Order';
+                btn.classList.remove('btn-update');
+            }
+        }
+
+        function clearCurrentOrder() {
+            products.forEach(p => {
+                currentOrder[p.id] = 0;
+            });
+            editingOrderId = null;
+            updateCurrentOrder();
+        }
+
+        // ==================== ORDER MANAGEMENT ====================
+        let editingOrderId = null; // Track which order is being edited
+
+        function createOrder() {
+            const orderItems = [];
+            let total = 0;
+
+            products.forEach(product => {
+                const quantity = currentOrder[product.id] || 0;
+                if (quantity > 0) {
+                    orderItems.push({
+                        productId: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: quantity
+                    });
                     total += quantity * product.price;
                 }
             });
 
-            // Prevent sale if no items selected
-            if (!hasItems) {
-                return;
+            if (orderItems.length === 0) return;
+
+            if (editingOrderId !== null) {
+                // Update existing order
+                const orderIndex = orders.progress.findIndex(o => o.id === editingOrderId);
+                if (orderIndex !== -1) {
+                    const existingOrder = orders.progress[orderIndex];
+
+                    // Merge items: combine quantities for same products
+                    const mergedItems = [...existingOrder.items];
+                    orderItems.forEach(newItem => {
+                        const existingItem = mergedItems.find(item => item.productId === newItem.productId);
+                        if (existingItem) {
+                            existingItem.quantity += newItem.quantity;
+                        } else {
+                            mergedItems.push(newItem);
+                        }
+                    });
+
+                    // Recalculate total
+                    const newTotal = mergedItems.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+
+                    existingOrder.items = mergedItems;
+                    existingOrder.total = newTotal;
+
+                    clearCurrentOrder();
+                    editingOrderId = null;
+                    saveToLocalStorage();
+                    renderAllOrders();
+                    updateTabCounts();
+                    showNotification('✅', `Order #${existingOrder.id} Updated!`);
+                    switchTab('progress');
+                    updateCreateOrderButton();
+                    return;
+                }
             }
 
-            // Update stock and sold tracking
-            products.forEach(product => {
-                const quantity = cart[product.id] || 0;
-                if (quantity > 0) {
-                    product.stock -= quantity;
-                    totalSold[product.id] = (totalSold[product.id] || 0) + quantity;
+            // Create new order
+            const order = {
+                id: orderCounter++,
+                items: orderItems,
+                total: total,
+                timestamp: new Date().toLocaleTimeString(),
+                status: 'new'
+            };
+
+            orders.progress.push(order);
+            clearCurrentOrder();
+            editingOrderId = null;
+            saveToLocalStorage();
+            renderAllOrders();
+            updateTabCounts();
+            showNotification('✅', `Order #${order.id} Created!`);
+            switchTab('progress');
+            updateCreateOrderButton();
+        }
+
+        function editOrder(orderId) {
+            const order = orders.progress.find(o => o.id === orderId);
+            if (!order) return;
+
+            // Load order items into current order
+            clearCurrentOrder();
+            order.items.forEach(item => {
+                currentOrder[item.productId] = item.quantity;
+            });
+
+            editingOrderId = orderId;
+            updateCurrentOrder();
+            updateCreateOrderButton();
+            switchTab('new');
+            showNotification('✏️', `Editing Order #${orderId} - Add more items`);
+        }
+
+        function moveToCompleted(orderId) {
+            const orderIndex = orders.progress.findIndex(o => o.id === orderId);
+            if (orderIndex === -1) return;
+
+            const order = orders.progress[orderIndex];
+
+            // Update stock and revenue
+            order.items.forEach(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (product) {
+                    product.stock -= item.quantity;
+                    totalSold[item.productId] = (totalSold[item.productId] || 0) + item.quantity;
                 }
             });
 
-            // Update revenue
-            totalRevenue += total;
+            totalRevenue += order.total;
+            order.status = 'completed';
+            order.completedTime = new Date().toLocaleTimeString();
 
-            // Reset cart
-            products.forEach(p => {
-                cart[p.id] = 0;
-            });
+            orders.completed.push(order);
+            orders.progress.splice(orderIndex, 1);
 
-            // Save to localStorage
             saveToLocalStorage();
-
-            // Re-render
             renderProducts();
-            updateBillTotal();
+            renderAllOrders();
             updateRevenueDisplay();
-            updateSummaryTable();
+            updateTabCounts();
+            showNotification('✅', `Order #${order.id} Completed! +₹${order.total}`);
+        }
 
-            // Show success notification
-            showNotification('✅', `Sale Complete! ₹${total}`);
+        function cancelOrder(orderId, status) {
+            const orderIndex = orders[status].findIndex(o => o.id === orderId);
+            if (orderIndex === -1) return;
+
+            if (confirm(`Cancel Order #${orderId}?`)) {
+                orders[status].splice(orderIndex, 1);
+                saveToLocalStorage();
+                renderAllOrders();
+                updateTabCounts();
+                showNotification('✅', `Order #${orderId} Cancelled`);
+            }
+        }
+
+        // ==================== ORDER RENDERING ====================
+        function renderAllOrders() {
+            renderOrderList('progress', orders.progress);
+            renderOrderList('completed', orders.completed);
+        }
+
+        function renderOrderList(status, orderList) {
+            const container = document.getElementById(`${status}Orders`);
+            container.innerHTML = '';
+
+            if (orderList.length === 0) {
+                container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div>No ${status} orders</div></div>`;
+                return;
+            }
+
+            orderList.forEach(order => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+
+                // Create detailed items list
+                const itemsList = order.items.map(item => `
+                    <div style="display: flex; justify-content: space-between; padding: 0.25rem 0; font-size: 0.85rem;">
+                        <span>${item.quantity}x ${item.name}</span>
+                        <span style="font-weight: 600;">₹${item.quantity * item.price}</span>
+                    </div>
+                `).join('');
+
+                let actions = '';
+                if (status === 'progress') {
+                    actions = `
+                        <button class="btn btn-small btn-complete" onclick="moveToCompleted(${order.id})">Complete</button>
+                        <button class="btn btn-small btn-progress" onclick="editOrder(${order.id})">Add Items</button>
+                        <button class="btn btn-small btn-cancel" onclick="cancelOrder(${order.id}, 'progress')">Cancel</button>
+                    `;
+                } else if (status === 'completed') {
+                    actions = `<div style="text-align: center; color: #4a4a4a; font-size: 0.85rem;">✓ Completed at ${order.completedTime}</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="order-card-header">
+                        <span class="order-number">Order #${order.id}</span>
+                        <span class="order-time">${order.timestamp}</span>
+                    </div>
+                    <div style="margin-bottom: 0.75rem; padding: 0.5rem; background: #ffffff; border-radius: 6px; border: 1px solid #e0e0e0;">
+                        ${itemsList}
+                    </div>
+                    <div class="order-card-total">Total: ₹${order.total}</div>
+                    <div class="order-card-actions">${actions}</div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // ==================== TAB MANAGEMENT ====================
+        function switchTab(tabName) {
+            currentTab = tabName;
+
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // Update tab panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            document.getElementById(`${tabName}Tab`).classList.remove('hidden');
+        }
+
+        function updateTabCounts() {
+            document.getElementById('progressCount').textContent = orders.progress.length;
+            document.getElementById('completedCount').textContent = orders.completed.length;
         }
 
         // ==================== SUMMARY ====================
+        function toggleSummary() {
+            const summary = document.getElementById('salesSummary');
+            if (summary.classList.contains('hidden')) {
+                updateSummaryTable();
+                summary.classList.remove('hidden');
+            } else {
+                summary.classList.add('hidden');
+            }
+        }
+
         function updateSummaryTable() {
             const tbody = document.getElementById('summaryTableBody');
             tbody.innerHTML = '';
 
             products.forEach(product => {
-                const row = document.createElement('tr');
                 const sold = totalSold[product.id] || 0;
+                const revenue = sold * product.price;
 
+                const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${product.name}</td>
                     <td>${sold}</td>
                     <td>${product.stock}</td>
+                    <td>₹${revenue}</td>
                 `;
-
                 tbody.appendChild(row);
             });
         }
 
-        function toggleSummary() {
-            const summary = document.getElementById('salesSummary');
-            const btn = document.getElementById('toggleSummaryBtn');
-
-            if (summary.classList.contains('hidden')) {
-                updateSummaryTable();
-                summary.classList.remove('hidden');
-                btn.textContent = 'Hide Summary';
-            } else {
-                summary.classList.add('hidden');
-                btn.textContent = 'View Summary';
-            }
+        function updateRevenueDisplay() {
+            document.getElementById('totalRevenue').textContent = totalRevenue;
         }
 
         // ==================== NOTIFICATION ====================
@@ -1153,13 +1307,6 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 2000);
-        }
-
-        // ==================== EVENT LISTENERS ====================
-        function attachEventListeners() {
-            document.getElementById('completeSaleBtn').addEventListener('click', completeSale);
-            document.getElementById('resetDayBtn').addEventListener('click', resetDay);
-            document.getElementById('toggleSummaryBtn').addEventListener('click', toggleSummary);
         }
 
         // ==================== START APPLICATION ====================
